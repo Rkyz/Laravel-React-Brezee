@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Checkbox from '@/Components/Checkbox';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
@@ -6,6 +6,7 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { PiEyeClosed, PiEye } from "react-icons/pi";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -25,6 +26,12 @@ export default function Login({ status, canResetPassword }) {
 
         post(route('login'));
     };
+
+    const [showPassword, setShowPassword] = useState(false)
+
+    const handleShowPassword = () => {
+        setShowPassword(!showPassword)
+    }
 
     return (
         <GuestLayout>
@@ -52,16 +59,26 @@ export default function Login({ status, canResetPassword }) {
 
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="Password" />
-
+                    <div className='flex gap-[10px]'>
                     <TextInput
                         id="password"
-                        type="password"
+                        type={showPassword ? "text":"password"}
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="current-password"
                         onChange={(e) => setData('password', e.target.value)}
                     />
+                    <button type="button" onClick={handleShowPassword} className='mt-1 block bg-white capitalize text-black border border-gray-300 rounded-md p-[10px]'>
+                        {showPassword ? (
+                            <PiEyeClosed/>
+                        
+                            ):(
+                                <PiEye/>
+                        )}
+                    </button>
+                    </div>
+
 
                     <InputError message={errors.password} className="mt-2" />
                 </div>
@@ -73,7 +90,7 @@ export default function Login({ status, canResetPassword }) {
                             checked={data.remember}
                             onChange={(e) => setData('remember', e.target.checked)}
                         />
-                        <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
+                        <span className="ms-2 text-sm text-gray-600 idk:text-gray-400">Remember me</span>
                     </label>
                 </div>
 
@@ -81,7 +98,7 @@ export default function Login({ status, canResetPassword }) {
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                            className="underline text-sm text-gray-600 idk:text-gray-400 hover:text-gray-900 idk:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 idk:focus:ring-offset-gray-800"
                         >
                             Forgot your password?
                         </Link>
